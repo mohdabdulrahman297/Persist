@@ -4,7 +4,7 @@ import { Link, useLocation } from "react-router-dom";
 import { AiOutlineSearch } from "react-icons/ai";
 import { FaMoon, FaSun } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
-import { FaUser, FaSignOutAlt } from "react-icons/fa";
+import { HiUser, HiArrowSmRight } from "react-icons/hi";
 import { toggleTheme } from "../redux/theme/themeSlice";
 
 export default function Header() {
@@ -63,12 +63,12 @@ export default function Header() {
             </Dropdown.Header>
             <Link to={"/dashboard?tab=profile"}>
               <Dropdown.Item>
-                <FaUser className="mr-2" /> Profile
+                <HiUser className="mr-2" /> Profile
               </Dropdown.Item>
             </Link>
             <Dropdown.Divider />
             <Dropdown.Item>
-              <FaSignOutAlt className="mt-1 mr-2" /> Sign out
+              <HiArrowSmRight className="mt-1 mr-2" /> Sign out
             </Dropdown.Item>
           </Dropdown>
         ) : (
