@@ -91,7 +91,7 @@ export default function Header() {
               </Dropdown.Item>
             </Link>
             <Dropdown.Divider />
-            <Link to="/dashboard/create-recipe">
+            <Link to="/dashboard?tab=recipes">
               <Dropdown.Item>
                 <HiDocumentText className="mt-1 mr-2" /> Recipes
               </Dropdown.Item>
