@@ -1,4 +1,11 @@
-import { Button, FileInput, Select, TextInput, Textarea } from "flowbite-react";
+import {
+  Alert,
+  Button,
+  FileInput,
+  Select,
+  TextInput,
+  Textarea,
+} from "flowbite-react";
 import { useState } from "react";
 import {
   getDownloadURL,
@@ -9,12 +16,16 @@ import {
 import { app } from "../firebase";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
+import { useNavigate } from "react-router-dom";
 
 export default function CreatePost() {
   const [file, setfile] = useState(null);
   const [imageUploadProgress, setImageUploadProgress] = useState(null);
   const [imageUploadError, setImageUploadError] = useState(null);
   const [formData, setFormData] = useState({});
+  const [publishError, setPublishError] = useState(null);
+
+  const navigate = useNavigate();
 
   const handleUploadImage = async () => {
     try {
@@ -53,12 +64,41 @@ export default function CreatePost() {
     }
   };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await fetch("/api/recipe/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!res.ok) {
+        const errorData = await res.json();
+        console.error("Error:", errorData.message);
+        setPublishError(errorData.message);
+        return;
+      }
+
+      const data = await res.json();
+      console.log("Server Response:", data);
+
+      setPublishError(null);
+      navigate(`/recipe/${data.title}`);
+    } catch (error) {
+      console.error("Something went wrong:", error);
+      setPublishError("Something went wrong");
+    }
+  };
+
   return (
     <div className="p-3 max-w-3xl mx-auto min-h-screen">
       <h1 className="text-center text-3xl my-7 font-semibold">
         Your Recipe, Your Way!
       </h1>
-      <form className="flex flex-col gap-4">
+      <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
         <div className="flex flex-col gap-4 sm:flex-row justify-between">
           <TextInput
             type="text"
@@ -66,15 +106,21 @@ export default function CreatePost() {
             required
             id="title"
             className="flex-1"
+            onChange={(e) =>
+              setFormData({ ...formData, title: e.target.value })
+            }
           />
-          <Select>
+          <Select
+            onChange={(e) =>
+              setFormData({ ...formData, category: e.target.value })
+            }
+          >
             <option value="uncategorized">Category</option>
             <option value="vegeterian">Vegetarian</option>
             <option value="Desserts">Desserts</option>
             <option value="breakfast">Breakfast</option>
             <option value="starter">Starter</option>
             <option value="seafood">Seafood</option>
-            <option value="miscellanous">Miscellanous</option>
           </Select>
         </div>
         <div className="flex gap-4 items-center justify-between border-4 border-teal-100 p-3">
@@ -122,10 +168,18 @@ export default function CreatePost() {
           placeholder="Add your recipe steps here..."
           className="h-72 mb-12"
           required
+          onChange={(e) => {
+            setFormData({ ...formData, content: e.target.value });
+          }}
         />
         <Button type="submit" className="bg-orange-400 dark:bg-orange-400">
           Submit
         </Button>
+        {publishError && (
+          <Alert className="mt-5" color="failure">
+            {publishError}
+          </Alert>
+        )}
       </form>
     </div>
   );

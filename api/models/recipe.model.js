@@ -6,7 +6,7 @@ const recipeSchema = new mongoose.Schema(
         type: String,
         required: true,
     },
-    
+
     title: {
       type: String,
       required: true,
@@ -23,7 +23,7 @@ const recipeSchema = new mongoose.Schema(
     videoLink: {
       type: String,
     },
-    steps: {
+    content : {
       type: String,
       required: true,
     },
