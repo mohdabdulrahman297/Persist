@@ -1,5 +1,5 @@
 import { Sidebar } from "flowbite-react";
-import { HiUser, HiArrowSmRight } from "react-icons/hi";
+import { HiUser, HiArrowSmRight, HiDocumentText } from "react-icons/hi";
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { signoutSuccess } from "../redux/user/userSlice";
@@ -51,8 +51,22 @@ export default function DashSidebar() {
             </Sidebar.Item>
           </Link>
           <Link to="create-recipe">
-            <Sidebar.Item icon={IoIosAddCircle} className="cursor-pointer mt-3">
+            <Sidebar.Item
+              icon={IoIosAddCircle}
+              className="cursor-pointer mt-3"
+              as="div"
+            >
               Contribute
+            </Sidebar.Item>
+          </Link>
+          <Link to="/dashboard?tab=recipes">
+            <Sidebar.Item
+              active={tab === "recipes"}
+              icon={HiDocumentText}
+              as="div"
+              className="cursor-pointer mt-3"
+            >
+              Recipes
             </Sidebar.Item>
           </Link>
           <Sidebar.Item

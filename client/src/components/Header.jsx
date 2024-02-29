@@ -4,7 +4,7 @@ import { Link, useLocation } from "react-router-dom";
 import { AiOutlineSearch } from "react-icons/ai";
 import { FaMoon, FaSun } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
-import { HiUser, HiArrowSmRight } from "react-icons/hi";
+import { HiUser, HiArrowSmRight, HiDocumentText } from "react-icons/hi";
 import { toggleTheme } from "../redux/theme/themeSlice";
 import { IoIosAddCircle } from "react-icons/io";
 import { signoutSuccess } from "../redux/user/userSlice";
@@ -88,6 +88,12 @@ export default function Header() {
             <Link to="/dashboard/create-recipe">
               <Dropdown.Item>
                 <IoIosAddCircle className="mt-1 mr-2" /> Contribute
+              </Dropdown.Item>
+            </Link>
+            <Dropdown.Divider />
+            <Link to="/dashboard/create-recipe">
+              <Dropdown.Item>
+                <HiDocumentText className="mt-1 mr-2" /> Recipes
               </Dropdown.Item>
             </Link>
             <Dropdown.Divider />
