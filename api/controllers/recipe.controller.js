@@ -63,3 +63,16 @@ export const getRecipes = async (req, res, next) => {
     next(error);
   }
 };
+
+
+export const deleteRecipe = async (req, res, next) => {
+  if (req.user.id !== req.params.userId) {
+    return next(errorHandler(403, 'You are not allowed to delete this recipe'));
+  }
+  try {
+    await Recipe.findByIdAndDelete(req.params.recipeId);
+    res.status(200).json('The recipe has been deleted');
+  } catch (error) {
+    next(error);
+  }
+};

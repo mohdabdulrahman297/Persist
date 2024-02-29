@@ -1,12 +1,17 @@
-import { Table } from "flowbite-react";
+import { Modal, Table, Button } from "flowbite-react";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { HiOutlineExclamationCircle } from "react-icons/hi";
+import { set } from "mongoose";
 
 export default function DashRecipe() {
   const { currentUser } = useSelector((state) => state.user);
   const [userRecipes, setUserRecipes] = useState([]);
   const [showMore, setShowMore] = useState(true);
+  const [showModal, setShowModal] = useState(false);
+  const [recipeIdToDelete, setRecipeIdToDelete] = useState("");
+
   useEffect(() => {
     const fetchRecipes = async () => {
       try {
@@ -38,6 +43,28 @@ export default function DashRecipe() {
         if (data.recipes.length < 9) {
           setShowMore(false);
         }
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  const handleDeleteRecipe = async () => {
+    setShowModal(false);
+    try {
+      const res = await fetch(
+        `/api/recipe/deleteRecipe/${recipeIdToDelete}/${currentUser._id}`,
+        {
+          method: "DELETE",
+        }
+      );
+      const data = await res.json();
+      if (!res.ok) {
+        console.log(data.message);
+      } else {
+        setUserRecipes((prev) =>
+          prev.filter((recipe) => recipe._id !== recipeIdToDelete)
+        );
       }
     } catch (error) {
       console.log(error.message);
@@ -84,7 +111,13 @@ export default function DashRecipe() {
                   </Table.Cell>
                   <Table.Cell>{recipe.category}</Table.Cell>
                   <Table.Cell>
-                    <span className="font-medium text-red-500 hover:underline cursor-pointer">
+                    <span
+                      className="font-medium text-red-500 hover:underline cursor-pointer"
+                      onClick={() => {
+                        setShowModal(true);
+                        setRecipeIdToDelete(recipe._id);
+                      }}
+                    >
                       Delete
                     </span>
                   </Table.Cell>
@@ -112,6 +145,30 @@ export default function DashRecipe() {
       ) : (
         <p>You have not posted any recipes !</p>
       )}
+      <Modal
+        show={showModal}
+        onClose={() => setShowModal(false)}
+        popup
+        size="md"
+      >
+        <Modal.Header />
+        <Modal.Body>
+          <div className="text-center">
+            <HiOutlineExclamationCircle className="h-14 w-14 text-gray-400 dark:text-gray-200 mb-4 mx-auto" />
+            <h3 className="mb-5 text-lg text-gray-500 dark:text-gray-400">
+              Are you sure you want to delete this recipe?
+            </h3>
+            <div className="flex justify-center gap-4">
+              <Button color="failure" onClick={handleDeleteRecipe}>
+                Yes, I'm sure
+              </Button>
+              <Button color="gray" onClick={() => setShowModal(false)}>
+                No, cancel
+              </Button>
+            </div>
+          </div>
+        </Modal.Body>
+      </Modal>
     </div>
   );
 }
