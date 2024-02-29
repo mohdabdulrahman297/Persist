@@ -10,6 +10,7 @@ import Recipes from "./pages/Recipes";
 import Footer from "./components/Footer";
 import PrivateRoute from "./components/PrivateRoute";
 import CreateRecipe from "./pages/CreateRecipe";
+import UpdateRecipe from "./pages/UpdateRecipe";
 
 export default function App() {
   return (
@@ -23,6 +24,7 @@ export default function App() {
         <Route element={<PrivateRoute />}>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/dashboard/create-recipe" element={<CreateRecipe />} />
+          <Route path="/update-recipe/:recipeId" element={<UpdateRecipe />} />
         </Route>
         <Route path="/recipes" element={<Recipes />} />
       </Routes>

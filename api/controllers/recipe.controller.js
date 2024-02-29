@@ -76,3 +76,28 @@ export const deleteRecipe = async (req, res, next) => {
     next(error);
   }
 };
+
+
+export const updateRecipe = async (req, res, next) => {
+  if (req.user.id !== req.params.userId) {
+    return next(errorHandler(403, 'You are not allowed to update this recipe'));
+  }
+  try {
+    const updatedRecipe = await Recipe.findByIdAndUpdate(
+      req.params.recipeId,
+      {
+        $set: {
+          title: req.body.title,
+          content: req.body.content,
+          category: req.body.category,
+          videoLink: req.body.videoLink,
+          image: req.body.image,
+        },
+      },
+      { new: true }
+    );
+    res.status(200).json(updatedRecipe);
+  } catch (error) {
+    next(error);
+  }
+};

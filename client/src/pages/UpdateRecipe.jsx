@@ -6,7 +6,7 @@ import {
   TextInput,
   Textarea,
 } from "flowbite-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   getDownloadURL,
   getStorage,
@@ -16,16 +16,42 @@ import {
 import { app } from "../firebase";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 
-export default function CreateRecipe() {
+export default function UpdateRecipe() {
   const [file, setfile] = useState(null);
   const [imageUploadProgress, setImageUploadProgress] = useState(null);
   const [imageUploadError, setImageUploadError] = useState(null);
   const [formData, setFormData] = useState({});
   const [publishError, setPublishError] = useState(null);
+  const { recipeId } = useParams();
 
   const navigate = useNavigate();
+
+  const { currentUser } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    try {
+      const fetchRecipe = async () => {
+        const res = await fetch(`/api/recipe/getRecipes?recipeId=${recipeId}`);
+        const data = await res.json();
+        if (!res.ok) {
+          console.log(data.message);
+          setPublishError(data.message);
+          return;
+        }
+        if (res.ok) {
+          setPublishError(null);
+          setFormData(data.recipes[0]);
+        }
+      };
+
+      fetchRecipe();
+    } catch (error) {
+      console.log(error.message);
+    }
+  }, [recipeId]);
 
   const handleUploadImage = async () => {
     try {
@@ -67,13 +93,16 @@ export default function CreateRecipe() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch("/api/recipe/create", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+      const res = await fetch(
+        `/api/recipe/updateRecipe/${formData._id}/${currentUser._id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
 
       if (!res.ok) {
         const errorData = await res.json();
@@ -96,7 +125,7 @@ export default function CreateRecipe() {
   return (
     <div className="p-3 max-w-3xl mx-auto min-h-screen">
       <h1 className="text-center text-3xl my-7 font-semibold">
-        Your Recipe, Your Way!
+        Update Your Recipe, Your Way!
       </h1>
       <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
         <div className="flex flex-col gap-4 sm:flex-row justify-between">
@@ -109,11 +138,13 @@ export default function CreateRecipe() {
             onChange={(e) =>
               setFormData({ ...formData, title: e.target.value })
             }
+            value={formData.title}
           />
           <Select
             onChange={(e) =>
               setFormData({ ...formData, category: e.target.value })
             }
+            value={formData.category}
           >
             <option value="uncategorized">Category</option>
             <option value="vegeterian">Vegetarian</option>
@@ -158,6 +189,7 @@ export default function CreateRecipe() {
         )}
         <TextInput
           type="text"
+          value={formData.videoLink}
           placeholder="YouTube video link here..."
           required
           id="video"
@@ -168,6 +200,7 @@ export default function CreateRecipe() {
         />
         <Textarea
           theme="snow"
+          value={formData.content}
           placeholder="Add your recipe steps here..."
           className="h-72 mb-12"
           required
@@ -176,7 +209,7 @@ export default function CreateRecipe() {
           }}
         />
         <Button type="submit" className="bg-orange-400 dark:bg-orange-400">
-          Submit
+          Update
         </Button>
         {publishError && (
           <Alert className="mt-5" color="failure">
