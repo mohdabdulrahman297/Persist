@@ -9,6 +9,7 @@ import Header from "./components/Header";
 import Recipes from "./pages/Recipes";
 import Footer from "./components/Footer";
 import PrivateRoute from "./components/PrivateRoute";
+import CreateRecipe from "./pages/CreateRecipe";
 
 export default function App() {
   return (
@@ -21,6 +22,7 @@ export default function App() {
         <Route path="/sign-up" element={<SignUp />} />
         <Route element={<PrivateRoute />}>
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/dashboard/create-recipe" element={<CreateRecipe />} />
         </Route>
         <Route path="/recipes" element={<Recipes />} />
       </Routes>

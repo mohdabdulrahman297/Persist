@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { HiUser, HiArrowSmRight } from "react-icons/hi";
 import { toggleTheme } from "../redux/theme/themeSlice";
 import { IoIosAddCircle } from "react-icons/io";
+import { signoutSuccess } from "../redux/user/userSlice";
 
 export default function Header() {
   const path = useLocation().pathname;
@@ -84,12 +85,14 @@ export default function Header() {
               </Dropdown.Item>
             </Link>
             <Dropdown.Divider />
-            <Dropdown.Item onClick={handleSignout}>
-              <HiArrowSmRight className="mt-1 mr-2" /> Sign out
-            </Dropdown.Item>
+            <Link to="/dashboard/create-recipe">
+              <Dropdown.Item>
+                <IoIosAddCircle className="mt-1 mr-2" /> Contribute
+              </Dropdown.Item>
+            </Link>
             <Dropdown.Divider />
             <Dropdown.Item onClick={handleSignout}>
-              <IoIosAddCircle className="mt-1 mr-2" /> Contribute
+              <HiArrowSmRight className="mt-1 mr-2" /> Sign out
             </Dropdown.Item>
           </Dropdown>
         ) : (

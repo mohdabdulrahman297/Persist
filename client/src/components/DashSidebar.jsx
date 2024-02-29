@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { signoutSuccess } from "../redux/user/userSlice";
 import { useDispatch } from "react-redux";
+import { IoIosAddCircle } from "react-icons/io";
 
 export default function DashSidebar() {
   const location = useLocation();
@@ -47,6 +48,11 @@ export default function DashSidebar() {
               as="div"
             >
               Profile
+            </Sidebar.Item>
+          </Link>
+          <Link to="create-recipe">
+            <Sidebar.Item icon={IoIosAddCircle} className="cursor-pointer mt-3">
+              Contribute
             </Sidebar.Item>
           </Link>
           <Sidebar.Item
