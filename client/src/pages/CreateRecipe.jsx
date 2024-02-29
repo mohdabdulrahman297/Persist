@@ -29,23 +29,26 @@ export default function CreatePost() {
           <FileInput type="file" accept="image/*" />
           <Button
             type="button"
-            className="bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500"
+            className="bg-orange-400 dark:bg-orange-400"
             size="sm"
-            outline
           >
             Upload image
           </Button>
         </div>
+        <TextInput
+          type="text"
+          placeholder="YouTube video link here..."
+          required
+          id="video"
+          className="flex-1"
+        />
         <Textarea
           theme="snow"
           placeholder="Add your recipe steps here..."
           className="h-72 mb-12"
           required
         />
-        <Button
-          type="submit"
-          className="bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500"
-        >
+        <Button type="submit" className="bg-orange-400 dark:bg-orange-400">
           Submit
         </Button>
       </form>
