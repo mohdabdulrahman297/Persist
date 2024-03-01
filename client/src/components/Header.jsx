@@ -85,7 +85,7 @@ export default function Header() {
               </Dropdown.Item>
             </Link>
             <Dropdown.Divider />
-            <Link to="/dashboard/create-recipe">
+            <Link to="/create-recipe">
               <Dropdown.Item>
                 <IoIosAddCircle className="mt-1 mr-2" /> Contribute
               </Dropdown.Item>

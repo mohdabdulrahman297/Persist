@@ -27,7 +27,7 @@ export const getRecipes = async (req, res, next) => {
     const recipes = await Recipe.find({
       ...(req.query.userId && { userId: req.query.userId }),
       ...(req.query.category && { category: req.query.category }),
-      ...(req.query.slug && { category: req.query.slug }),
+      ...(req.query.slug && { slug: req.query.slug }),
       ...(req.query.recipeId && { _id: req.query.recipeId }),
       ...(req.query.searchTerm && {
         $or: [

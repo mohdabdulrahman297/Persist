@@ -11,6 +11,7 @@ import Footer from "./components/Footer";
 import PrivateRoute from "./components/PrivateRoute";
 import CreateRecipe from "./pages/CreateRecipe";
 import UpdateRecipe from "./pages/UpdateRecipe";
+import RecipePage from "./pages/RecipePage";
 
 export default function App() {
   return (
@@ -23,10 +24,12 @@ export default function App() {
         <Route path="/sign-up" element={<SignUp />} />
         <Route element={<PrivateRoute />}>
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/dashboard/create-recipe" element={<CreateRecipe />} />
+          <Route path="/create-recipe" element={<CreateRecipe />} />
           <Route path="/update-recipe/:recipeId" element={<UpdateRecipe />} />
+          <Route path="/recipe/:recipeSlug" element={<RecipePage />} />
         </Route>
         <Route path="/recipes" element={<Recipes />} />
+        <Route path="/recipe/:recipeSlug" element={<RecipePage />} />
       </Routes>
       <Footer />
     </BrowserRouter>

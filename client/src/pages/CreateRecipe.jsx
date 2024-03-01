@@ -1,12 +1,7 @@
-import {
-  Alert,
-  Button,
-  FileInput,
-  Select,
-  TextInput,
-  Textarea,
-} from "flowbite-react";
+import { Alert, Button, FileInput, Select, TextInput } from "flowbite-react";
 import { useState } from "react";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 import {
   getDownloadURL,
   getStorage,
@@ -74,21 +69,17 @@ export default function CreateRecipe() {
         },
         body: JSON.stringify(formData),
       });
-
+      const data = await res.json();
       if (!res.ok) {
-        const errorData = await res.json();
-        console.error("Error:", errorData.message);
-        setPublishError(errorData.message);
+        setPublishError(data.message);
         return;
       }
 
-      const data = await res.json();
-      console.log("Server Response:", data);
-
-      setPublishError(null);
-      navigate(`/recipe/${data.title}`);
+      if (res.ok) {
+        setPublishError(null);
+        navigate(`/recipe/${data.slug}`);
+      }
     } catch (error) {
-      console.error("Something went wrong:", error);
       setPublishError("Something went wrong");
     }
   };
@@ -166,13 +157,13 @@ export default function CreateRecipe() {
             setFormData({ ...formData, videoLink: e.target.value });
           }}
         />
-        <Textarea
+        <ReactQuill
           theme="snow"
-          placeholder="Add your recipe steps here..."
+          placeholder="Ingredients and process ..."
           className="h-72 mb-12"
           required
-          onChange={(e) => {
-            setFormData({ ...formData, content: e.target.value });
+          onChange={(value) => {
+            setFormData({ ...formData, content: value });
           }}
         />
         <Button type="submit" className="bg-orange-400 dark:bg-orange-400">

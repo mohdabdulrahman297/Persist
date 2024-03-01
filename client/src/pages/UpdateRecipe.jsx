@@ -1,11 +1,4 @@
-import {
-  Alert,
-  Button,
-  FileInput,
-  Select,
-  TextInput,
-  Textarea,
-} from "flowbite-react";
+import { Alert, Button, FileInput, Select, TextInput } from "flowbite-react";
 import { useEffect, useState } from "react";
 import {
   getDownloadURL,
@@ -13,6 +6,8 @@ import {
   ref,
   uploadBytesResumable,
 } from "firebase/storage";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 import { app } from "../firebase";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
@@ -26,6 +21,7 @@ export default function UpdateRecipe() {
   const [formData, setFormData] = useState({});
   const [publishError, setPublishError] = useState(null);
   const { recipeId } = useParams();
+  console.log("Recipe ID:", recipeId);
 
   const navigate = useNavigate();
 
@@ -37,7 +33,6 @@ export default function UpdateRecipe() {
         const res = await fetch(`/api/recipe/getRecipes?recipeId=${recipeId}`);
         const data = await res.json();
         if (!res.ok) {
-          console.log(data.message);
           setPublishError(data.message);
           return;
         }
@@ -94,7 +89,7 @@ export default function UpdateRecipe() {
     e.preventDefault();
     try {
       const res = await fetch(
-        `/api/recipe/updateRecipe/${formData._id}/${currentUser._id}`,
+        `/api/recipe/updateRecipe/${recipeId}/${currentUser._id}`,
         {
           method: "PUT",
           headers: {
@@ -104,20 +99,17 @@ export default function UpdateRecipe() {
         }
       );
 
+      const data = await res.json();
       if (!res.ok) {
-        const errorData = await res.json();
-        console.error("Error:", errorData.message);
-        setPublishError(errorData.message);
+        setPublishError(data.message);
         return;
       }
 
-      const data = await res.json();
-      console.log("Server Response:", data);
-
-      setPublishError(null);
-      navigate(`/recipe/${data.title}`);
+      if (res.ok) {
+        setPublishError(null);
+        navigate(`/recipe/${data.slug}`);
+      }
     } catch (error) {
-      console.error("Something went wrong:", error);
       setPublishError("Something went wrong");
     }
   };
@@ -125,7 +117,7 @@ export default function UpdateRecipe() {
   return (
     <div className="p-3 max-w-3xl mx-auto min-h-screen">
       <h1 className="text-center text-3xl my-7 font-semibold">
-        Update Your Recipe, Your Way!
+        Update Your Recipe!
       </h1>
       <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
         <div className="flex flex-col gap-4 sm:flex-row justify-between">
@@ -198,14 +190,14 @@ export default function UpdateRecipe() {
             setFormData({ ...formData, videoLink: e.target.value });
           }}
         />
-        <Textarea
+        <ReactQuill
           theme="snow"
           value={formData.content}
-          placeholder="Add your recipe steps here..."
+          placeholder="Ingredients and process ..."
           className="h-72 mb-12"
           required
-          onChange={(e) => {
-            setFormData({ ...formData, content: e.target.value });
+          onChange={(value) => {
+            setFormData({ ...formData, content: value });
           }}
         />
         <Button type="submit" className="bg-orange-400 dark:bg-orange-400">

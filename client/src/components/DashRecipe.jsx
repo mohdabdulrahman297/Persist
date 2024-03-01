@@ -93,7 +93,7 @@ export default function DashRecipe() {
                     {new Date(recipe.updatedAt).toLocaleDateString()}
                   </Table.Cell>
                   <Table.Cell>
-                    <Link to={`/recipe/${recipe.slug}`}>
+                    <Link to={`/recipe/${recipe.title}`}>
                       <img
                         src={recipe.image}
                         alt={recipe.title}
@@ -104,7 +104,7 @@ export default function DashRecipe() {
                   <Table.Cell>
                     <Link
                       className="font-medium text-gray-900 dark:text-white"
-                      to={`/recipe/${recipe.slug}`}
+                      to={`/recipe/${recipe.title}`}
                     >
                       {recipe.title}
                     </Link>
