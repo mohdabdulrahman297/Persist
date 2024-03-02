@@ -56,7 +56,6 @@ export default function YourComponent() {
           Your Favourites
         </h2>
         <div className="flex flex-wrap gap-4">
-          {/* Map through your recipes and render RecipeCard */}
           {recipes.map((recipe) => (
             <RecipeCard
               key={recipe._id}
@@ -65,7 +64,6 @@ export default function YourComponent() {
               isSaved={savedRecipeIds.includes(recipe._id)}
             />
           ))}
-          {/* Other components or content in your page */}
         </div>
         <Link
           to={"/create-recipe"}

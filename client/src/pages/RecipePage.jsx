@@ -4,16 +4,17 @@ import { Link, useParams } from "react-router-dom";
 import { FaYoutube } from "react-icons/fa";
 
 export default function RecipePage() {
-  const { recipeTitle } = useParams();
+  const { recipeSlug } = useParams();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [recipe, setRecipe] = useState(null);
+  const [recentRecipes, setRecentRecipes] = useState(null);
 
   useEffect(() => {
     const fetchRecipe = async () => {
       try {
         setLoading(true);
-        const res = await fetch(`/api/recipe/getRecipes?title=${recipeTitle}`);
+        const res = await fetch(`/api/recipe/getRecipes?slug=${recipeSlug}`);
         const data = await res.json();
         if (!res.ok) {
           setError(true);
@@ -31,7 +32,22 @@ export default function RecipePage() {
       }
     };
     fetchRecipe();
-  }, [recipeTitle]);
+  }, [recipeSlug]);
+
+  useEffect(() => {
+    try {
+      const fetchRecentRecipes = async () => {
+        const res = await fetch(`/api/recipe/getRecipes?limit=3`);
+        const data = await res.json();
+        if (res.ok) {
+          setRecentRecipes(data.recipes);
+        }
+      };
+      fetchRecentRecipes();
+    } catch (error) {
+      console.log(error.message);
+    }
+  }, []);
 
   if (loading)
     return (
@@ -73,8 +89,8 @@ export default function RecipePage() {
             className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 cursor-pointer"
           />
           <img
-            src={recipe.image}
-            alt={recipe.title}
+            src={recipe && recipe.image}
+            alt={recipe && recipe.title}
             className="p-3 max-h-[600px] w-full object-cover cursor-pointer"
           />
         </div>

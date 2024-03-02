@@ -1,8 +1,31 @@
 import { Link } from "react-router-dom";
-import { MdOutlineBookmarkAdd } from "react-icons/md";
+import { MdOutlineBookmarkAdd, MdOutlineBookmarkRemove } from "react-icons/md";
 import { IoMdShare } from "react-icons/io";
 
-export default function RecipeCard({ recipe, onSaveToggle }) {
+export default function RecipeCard({
+  recipe,
+  onSaveToggle,
+  onRemoveToggle,
+  isSaved,
+}) {
+  const handleShare = async () => {
+    try {
+      if (navigator.share) {
+        await navigator.share({
+          title: recipe.title,
+          text: recipe.title,
+          url: window.location.href,
+        });
+      } else {
+        // Fallback behavior if navigator.share is not available
+        // You can implement your own custom share UI or provide a link to copy the URL
+        console.log("Sharing not supported, implement your custom share UI");
+      }
+    } catch (error) {
+      console.error("Error sharing recipe:", error.message);
+    }
+  };
+
   return (
     <div className="group relative w-full border border-teal-500 hover:border-2 h-[350px] overflow-hidden rounded-lg sm:w-[430px] transition-all">
       <Link to={`/recipe/${recipe.slug}`}>
@@ -17,11 +40,21 @@ export default function RecipeCard({ recipe, onSaveToggle }) {
           <p className="text-lg font-semibold line-clamp-2 dark:text-black">
             {recipe.title}
           </p>
-          <MdOutlineBookmarkAdd
-            onClick={() => onSaveToggle(recipe._id)}
-            className="cursor-pointer size-5 dark:text-black hover:opacity-45"
+          {isSaved ? (
+            <MdOutlineBookmarkRemove
+              onClick={() => onRemoveToggle(recipe._id)}
+              className="cursor-pointer size-5 dark:text-black hover:opacity-45"
+            />
+          ) : (
+            <MdOutlineBookmarkAdd
+              onClick={() => onSaveToggle(recipe._id)}
+              className="cursor-pointer size-5 dark:text-black hover:opacity-45"
+            />
+          )}
+          <IoMdShare
+            onClick={handleShare}
+            className="cursor-pointer size-5 hover:opacity-45 dark:text-black"
           />
-          <IoMdShare className="cursor-pointer size-5 hover:opacity-45 dark:text-black" />
         </div>
         <span className="italic text-sm mb-2 dark:text-black">
           {recipe.category}

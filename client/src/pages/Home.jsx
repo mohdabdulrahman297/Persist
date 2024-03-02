@@ -23,7 +23,8 @@ export default function Component() {
               Discover, cook, and share your favorite recipes
             </h1>
             <p className="text-gray-500 md:text-xl dark:text-gray-400">
-              Access a world of culinary inspiration. Anytime. Anywhere.
+              The all-in-one recipe app for home cooks. Discover new recipes,
+              plan your meals, and create your wish list with a tap.
             </p>
             <Link
               to="/sign-in"
@@ -57,7 +58,7 @@ export default function Component() {
               to={"/search"}
               className="text-lg text-teal-500 hover:underline text-center"
             >
-              View all posts
+              View all Recipes
             </Link>
           </div>
         )}
