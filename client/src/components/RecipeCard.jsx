@@ -67,7 +67,7 @@ export default function RecipeCard({ recipe }) {
         />
       </Link>
       <div className="p-3 flex flex-col gap-2">
-        <div className="flex items-center gap-20">
+        <div className="flex items-center gap-4">
           <p className="text-lg font-semibold line-clamp-2 dark:text-black">
             {recipe.title}
           </p>

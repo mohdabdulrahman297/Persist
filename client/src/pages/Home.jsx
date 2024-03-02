@@ -43,13 +43,13 @@ export default function Component() {
         </div>
       </section>
 
-      <div className="max-w-6xl mx-auto p-3 flex flex-col gap-8 py-7">
+      <div className="p-3 flex flex-row gap-2 py-7 justify-center">
         {recipes && recipes.length > 0 && (
           <div className="flex flex-col gap-6">
             <h2 className="text-3xl font-semibold text-center dark:text-black">
               Featured Recipes
             </h2>
-            <div className="flex flex-wrap gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {recipes.map((recipe) => (
                 <RecipeCard key={recipe._id} recipe={recipe} />
               ))}
