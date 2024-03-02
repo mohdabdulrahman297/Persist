@@ -1,5 +1,4 @@
 import Recipe from "../models/recipe.model.js";
-import User from "../models/user.model.js";
 import { errorHandler } from "../utils/error.js";
 
 export const create = async (req, res, next) => {
@@ -99,44 +98,6 @@ export const updateRecipe = async (req, res, next) => {
       { new: true }
     );
     res.status(200).json(updatedRecipe);
-  } catch (error) {
-    next(error);
-  }
-};
-
-export const saveRecipe = async (req, res, next) => {
-  if (req.user.id !== req.params.userId) {
-    return next(errorHandler(403, 'You are not allowed to save a recipe'));
-  }
-  try {
-    const recipe = await Recipe.findById(req.body.recipeId);
-    const user = await User.findById(req.body.userId);
-
-    if (!recipe || !user) {
-      return next(errorHandler(404, 'Recipe or User not found'));
-    }
-
-    user.savedRecipes.push(recipe);
-    await user.save();
-  } catch (error) {
-    next(error);
-  }
-}
-
-
-export const savedRecipes = async (req, res, next) => {
-  try {
-    const user = await User.findById(req.params.userId).populate('savedRecipes');
-    res.status(200).json(user?.savedRecipes || []);
-  } catch (error) {
-    next(error);
-  }
-};
-
-export const getSavedRecipes = async (req, res, next) => {
-  try {
-    const user = await User.findById(req.params.userId).populate('savedRecipes');
-    res.status(200).json({ savedRecipes: user?.savedRecipes || [] });
   } catch (error) {
     next(error);
   }

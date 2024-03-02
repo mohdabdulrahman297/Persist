@@ -1,13 +1,12 @@
 import { Link } from "react-router-dom";
-import { MdOutlineBookmarkAdd, MdOutlineBookmarkRemove } from "react-icons/md";
+import { MdOutlineBookmarkAdd } from "react-icons/md";
 import { IoMdShare } from "react-icons/io";
+import { useState } from "react";
+import { toast } from "react-toastify";
 
-export default function RecipeCard({
-  recipe,
-  onSaveToggle,
-  onRemoveToggle,
-  isSaved,
-}) {
+export default function RecipeCard({ recipe }) {
+  const [isSaved, setIsSaved] = useState(false);
+
   const handleShare = async () => {
     try {
       if (navigator.share) {
@@ -26,6 +25,38 @@ export default function RecipeCard({
     }
   };
 
+  const handleSaveRecipe = async () => {
+    const userId = recipe.userId;
+    const savedName = recipe.title;
+    const savedCategory = recipe.category;
+    const savedImage = recipe.image;
+
+    try {
+      const response = await fetch("/api/saved/saveRecipe", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId,
+          savedName,
+          savedCategory,
+          savedImage,
+        }),
+      });
+
+      if (response.ok) {
+        setIsSaved(true);
+        toast.success("Recipe saved successfully");
+      } else {
+        toast.error("Failed to save recipe");
+      }
+    } catch (error) {
+      console.error("Error saving recipe:", error.message);
+      toast.error("Error saving recipe");
+    }
+  };
+
   return (
     <div className="group relative w-full border border-teal-500 hover:border-2 h-[350px] overflow-hidden rounded-lg sm:w-[430px] transition-all">
       <Link to={`/recipe/${recipe.slug}`}>
@@ -40,17 +71,10 @@ export default function RecipeCard({
           <p className="text-lg font-semibold line-clamp-2 dark:text-black">
             {recipe.title}
           </p>
-          {isSaved ? (
-            <MdOutlineBookmarkRemove
-              onClick={() => onRemoveToggle(recipe._id)}
-              className="cursor-pointer size-5 dark:text-black hover:opacity-45"
-            />
-          ) : (
-            <MdOutlineBookmarkAdd
-              onClick={() => onSaveToggle(recipe._id)}
-              className="cursor-pointer size-5 dark:text-black hover:opacity-45"
-            />
-          )}
+          <MdOutlineBookmarkAdd
+            onClick={handleSaveRecipe}
+            className="cursor-pointer size-5 dark:text-black hover:opacity-45"
+          />
           <IoMdShare
             onClick={handleShare}
             className="cursor-pointer size-5 hover:opacity-45 dark:text-black"

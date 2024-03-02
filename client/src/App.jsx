@@ -6,14 +6,13 @@ import SignUp from "./pages/SignUp";
 import Dashboard from "./pages/Dashboard";
 import About from "./pages/About";
 import Header from "./components/Header";
-import Recipes from "./pages/Recipes";
 import Footer from "./components/Footer";
 import PrivateRoute from "./components/PrivateRoute";
 import CreateRecipe from "./pages/CreateRecipe";
 import UpdateRecipe from "./pages/UpdateRecipe";
 import RecipePage from "./pages/RecipePage";
-import RecipeListPage from "./pages/RecipeListPage";
 import Search from "./pages/Search";
+import Fav from "./pages/Fav";
 
 export default function App() {
   return (
@@ -30,7 +29,7 @@ export default function App() {
           <Route path="/create-recipe" element={<CreateRecipe />} />
           <Route path="/update-recipe/:recipeId" element={<UpdateRecipe />} />
           <Route path="/recipe/:recipeSlug" element={<RecipePage />} />
-          <Route path="/recipe-list" element={<RecipeListPage />} />
+          <Route path="/fav" element={<Fav />} />
         </Route>
       </Routes>
       <Footer />
