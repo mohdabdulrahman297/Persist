@@ -6,6 +6,8 @@ import authRoutes from './routes/auth.route.js';
 import recipeRoutes from './routes/recipe.route.js';
 import savedRoutes from './routes/saved.route.js'
 import cookieParser from 'cookie-parser';
+import path from 'path';
+
 
 dotenv.config();
 
@@ -14,6 +16,8 @@ mongoose.connect(process.env.MONGO).then(() => {
 }).catch((err) => {
     console.log(err);
 });
+
+const __dirname = path.resolve();
 
 const app = express();
 
@@ -28,6 +32,12 @@ app.use('/api/user', userRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/recipe', recipeRoutes);
 app.use('/api/saved', savedRoutes);
+
+app.use(express.static(path.join(__dirname, '/client/dist')));
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'client', 'dist', 'index.html'));
+});
 
 app.use((err, req, res, next) => {
     const statusCode = err.statusCode || 500;
