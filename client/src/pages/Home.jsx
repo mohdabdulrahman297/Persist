@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import { Button } from "flowbite-react";
 import { useEffect, useState } from "react";
 import RecipeCard from "../components/RecipeCard";
 
@@ -46,7 +45,7 @@ export default function Component() {
       <div className="max-w-6xl mx-auto p-3 flex flex-col gap-8 py-7">
         {recipes && recipes.length > 0 && (
           <div className="flex flex-col gap-6">
-            <h2 className="text-2xl font-semibold text-center">
+            <h2 className="text-2xl font-semibold text-center dark:text-black">
               Featured Recipes
             </h2>
             <div className="flex flex-wrap gap-4">
